@@ -90,7 +90,7 @@ def max_True(func,x0,x1,thr=1e-8):
     assert x1>x0
 
     if not func(x0):
-        return -np.inf
+        return None
     if func(x1):
         return x1
 
@@ -143,3 +143,4 @@ def augmented_alpha(d,al):
     #comp_one=(1-al)*p^d*die^d
     #comp_two=d*(1-al)*p^d*survive*die^(2*d-2)
     return al+(full_zero+comp_one)/2  #, al+rest
+
