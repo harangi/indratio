@@ -47,8 +47,11 @@ def sm_entropy(d,al,be):
 # BOUNDS for the asymptotic independence ratio alpha*_d of random d-regular graphs
 
 # first moment bound for alpha*_d (Bollobas bound)
-def fm_bound(d):
-    return find_root(lambda al: fm_entropy(d,al),1/d,0.49)
+def alpha_fm(d,float_res=True):
+    fun=lambda al: fm_entropy(d,al)
+    #al=find_root(fun,1/d,0.49)
+    al=mpmath.findroot(fun,(1/d,0.49))
+    return float(al) if float_res else al
 
 # lower bound for alpha*_d  (Shearer1983)
 def shearer_or(d):
