@@ -1,3 +1,12 @@
+# This code computes lower and upper bounds on the asymptotic independence ratio of random regular graphs.
+# It is a supplementary material for the paper
+# "Boosted second moment method in random regular graphs"
+# by Balázs Gerencsér and Viktor Harangi
+# https://arxiv.org/abs/2510.12600
+
+import mpmath
+mpmath.mp.dps=50
+
 def h(x):
     return -x*log(x) if x>0 else 0
 
@@ -34,8 +43,8 @@ def sm_entropy(d,al,be):
     vtx=h(be)+2*h(al-be)+h(1-2*al+be)
     return 0.5*d*sm_edge(al,be)-(d-1)*sm_vtx(al,be)
 
+#
 # BOUNDS for the asymptotic independence ratio alpha*_d of random d-regular graphs
-
 
 # first moment bound for alpha*_d (Bollobas bound)
 def fm_bound(d):
@@ -58,17 +67,18 @@ def wormald_simple(d):
     return 0.5-0.5/(d-1.)^((2./(d-2)))
 
 # formula for alpha*_d as in Ding-Sly-Sun ('á la frozen configuration')
-def ding_sly_sun(d, show_plot=False):
+def ding_sly_sun(d, show_plot=False, float_res=True):
     la=lambda q: q*(1-(1-q)^(d-1))/(1-q)^d
     al=lambda q: q*(1-q+d*q/2/la(q))/(1-q^2*(1-1/la(q)))
-    f= lambda q: -log(1-q*(1-1/la(q)))-(d/2-1)*log(1-q^2*(1-1/la(q)))-al(q)*log(la(q))
-    a=1.1*log(d)/d
-    b=2.*log(d)/d
-    q0=find_root(f,a,b)
+    fun= lambda q: -log(1-q*(1-1/la(q)))-(d/2-1)*log(1-q^2*(1-1/la(q)))-al(q)*log(la(q))
+    a=1.5*log(d)/d
+    b=1.75*log(d)/d
+    #q0=find_root(f,a,b)
+    q0=mpmath.findroot(fun,(1.5*a,1.75*a))
     if show_plot:
         plot(f,a,b).show()
         print("root=",q0)
-    return float(al(q0))
+    return float(al(q0)) if float_res else al(q0)
 
 # 1-RSB upper bound for alpha*_d  'á la interpolatin method'
 # should give the same value as ding_sly_sun
@@ -90,7 +100,7 @@ def max_True(func,x0,x1,thr=1e-8):
     assert x1>x0
 
     if not func(x0):
-        return None
+        return -np.inf
     if func(x1):
         return x1
 
@@ -142,5 +152,4 @@ def augmented_alpha(d,al):
     #die=1-survive
     #comp_one=(1-al)*p^d*die^d
     #comp_two=d*(1-al)*p^d*survive*die^(2*d-2)
-    return al+(full_zero+comp_one)/2  #, al+rest
-
+    return al+(full_zero+comp_one)/2
