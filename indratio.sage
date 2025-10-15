@@ -1,8 +1,8 @@
 # This code computes lower and upper bounds on the asymptotic independence ratio of random regular graphs.
-# It is a supplementary material for the paper
-# "Boosted second moment method in random regular graphs"
-# by Balázs Gerencsér and Viktor Harangi
-# https://arxiv.org/abs/2510.12600
+# It is a supplementary material for the following paper:
+#   "Boosted second moment method in random regular graphs"
+#     by Balázs Gerencsér and Viktor Harangi
+#   https://arxiv.org/abs/2510.12600
 
 import mpmath
 mpmath.mp.dps=50
@@ -49,9 +49,9 @@ def sm_entropy(d,al,be):
 # first moment bound for alpha*_d (Bollobas bound)
 def alpha_fm(d,float_res=True):
     fun=lambda al: fm_entropy(d,al)
-    #al=find_root(fun,1/d,0.49)
-    al=mpmath.findroot(fun,(1/d,0.49))
-    return float(al) if float_res else al
+    #al=find_root(fun,1./d,0.49)
+    al_fm=mpmath.findroot(fun,(1.25*log(d)/d,1.5*log(d)/d))
+    return float(al_fm) if float_res else al_fm
 
 # lower bound for alpha*_d  (Shearer1983)
 def shearer_or(d):
