@@ -139,6 +139,7 @@ def alpha_sm(d,show_plot=False):
             return val if val>val_max else val_max
 
         fig=plot(diff,0,al_sm)
+        fig+=plot(indep_val,0,al_sm,color='red')
         fig+=point((al_sm^2,diff(al_sm^2)),color='red')
         fig.show()
         
