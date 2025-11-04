@@ -103,7 +103,7 @@ def max_True(func,x0,x1,thr=1e-8):
     assert x1>x0
 
     if not func(x0):
-        return -np.inf
+        return None
     if func(x1):
         return x1
 
@@ -122,13 +122,14 @@ def max_True(func,x0,x1,thr=1e-8):
 def alpha_sm(d,show_plot=False):
     def sm_works(al):
         fun=lambda be: sm_entropy(d,al,be)
-        val1=find_local_maximum(fun,0,0.99*al^2)[0]
+        #val1=find_local_maximum(fun,0,0.99*al^2)[0]
         val2=fun(al^2)
         val3=find_local_maximum(fun,1.01*al^2,al)[0]
-        return val1<=val2 and val3<=val2
+        #return val1<=val2 and val3<=val2
+        return val3<=val2
     
     al_1rsb=ding_sly_sun(d)
-    al_sm=max_True(sm_works,al_1rsb/8,al_1rsb)
+    al_sm=max_True(sm_works,0.75*al_1rsb,al_1rsb)
         
     if show_plot:
         f_sm=lambda be: sm_entropy(d,al_sm,be)
